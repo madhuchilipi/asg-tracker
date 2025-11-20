@@ -13,11 +13,11 @@ openings = db["openings"]
 def seed_data():
     if users.count_documents({"role": "employee"}) == 0:
         users.insert_many([
-            {"email": "alice@asg.com", "password": "pass123", "name": "Alice", "designation": "Developer", "consultant": "Consultant A", "role": "employee"},
-            {"email": "bob@asg.com", "password": "pass456", "name": "Bob", "designation": "Tester", "consultant": "Consultant B", "role": "employee"}
+            {"email": "admin", "password": "admin", "name": "Alice", "designation": "Developer", "consultant": "Consultant A", "role": "employee"},
+            {"email": "admin", "password": "admin", "name": "Bob", "designation": "Tester", "consultant": "Consultant B", "role": "employee"}
         ])
     if users.count_documents({"role": "employer"}) == 0:
-        users.insert_one({"email": "employer@asg.com", "password": "admin", "name": "ASG Manager", "role": "employer"})
+        users.insert_one({"email": "admin, "password": "admin", "name": "ASG Manager", "role": "employer"})
     if openings.count_documents({}) == 0:
         openings.insert_many([
             {"title": "ML Engineer", "location": "Bangalore", "years_of_exp": "2", "description": "Work on ASG's AI projects."},
