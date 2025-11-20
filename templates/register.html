@@ -1,16 +1,104 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Employee Registration</title>
+  <title>Employee Registration | ASG IT</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0ebf5 0%, #f3f9fd 100%);
+      min-height: 100vh;
+    }
+    .banner {
+      background: #003366;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .centered-wrapper {
+      min-height: calc(100vh - 100px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(51,102,204,0.08);
+      padding: 2rem 2.5rem 2rem 2.5rem;
+      max-width: 400px;
+      width: 100%;
+      margin-top: 2rem;
+    }
+    h2 {
+      margin-top: 0;
+      color: #003366;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      color: #334c70;
+      font-weight: 500;
+    }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #b6c7de;
+      border-radius: 7px;
+      background: #f9faff;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: #2977ef;
+      outline: none;
+    }
+    button[type="submit"] {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      background: #2977ef;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button[type="submit"]:hover {
+      background: #003366;
+    }
+  </style>
 </head>
 <body>
-  <h2>Register Employee</h2>
-  <form action="/register" method="POST">
-    <label for="name">Name:</label><input type="text" name="name" required><br>
-    <label for="email">Email:</label><input type="email" name="email" required><br>
-    <label for="designation">Designation:</label><input type="text" name="designation" required><br>
-    <label for="consultant">Consultant Name:</label><input type="text" name="consultant"><br>
-    <button type="submit">Register</button>
-  </form>
+  <div class="banner">
+    ASG IT Employee Registration
+  </div>
+  <div class="centered-wrapper">
+    <form class="form-card" action="/register" method="POST">
+      <h2>Register Employee</h2>
+      <label for="name">Name:</label>
+      <input type="text" name="name" required>
+      <label for="email">Email:</label>
+      <input type="email" name="email" required>
+      <label for="designation">Designation:</label>
+      <input type="text" name="designation" required>
+      <label for="consultant">Consultant Name:</label>
+      <input type="text" name="consultant">
+      <button type="submit">Register</button>
+    </form>
+  </div>
 </body>
 </html>
