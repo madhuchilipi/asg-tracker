@@ -4,7 +4,9 @@
   <title>Employee Dashboard | ASG IT</title>
   <style>
     body {margin:0;font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#e0ebf5 0%,#f3f9fd 100%);}
-    .banner {background:#003366;color:white;padding:2rem 0;text-align:center;font-size:2.5rem;font-weight:bold;}
+    .banner {background:#003366;color:white;padding:2rem;text-align:center;font-size:2.5rem;font-weight:bold;display:flex;align-items:center;justify-content:space-between;}
+    .reg-btn {background:white;color:#003366;padding:0.6rem 1.5rem;border-radius:8px;font-weight:bold;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,0.15);transition:background 0.2s;font-size:1rem;white-space:nowrap;}
+    .reg-btn:hover {background:#e8f0fa;}
     .centered-wrapper {display:flex;flex-direction:column;align-items:center;justify-content:center;}
     .card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem;max-width:700px;width:100%;margin-top:2rem;}
     h2 {color:#003366;font-size:1.5rem;text-align:center;}
@@ -18,7 +20,7 @@
   </style>
 </head>
 <body>
-  <div class="banner">ASG IT Employee Dashboard</div>
+  <div class="banner"><span>ASG IT Employee Dashboard</span><a href="/register" class="reg-btn">Employee Registration</a></div>
   <div class="centered-wrapper">
     <div class="card">
       <h2>Current Openings</h2>
