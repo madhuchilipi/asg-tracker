@@ -1,14 +1,27 @@
 from flask import Flask, render_template, request, redirect, session
 from pymongo import MongoClient
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('ASG_SECRET_KEY', 'asg_default_secret')
 
+# Configure file upload
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Create upload folder if it doesn't exist
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
 client = MongoClient("mongodb://localhost:27017/")
 db = client["asg_db"]
 users = db["users"]
 openings = db["openings"]
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def seed_data():
     # Set both admin logins for employer and employee
@@ -45,13 +58,40 @@ def employee_register():
         password = request.form['password']
         designation = request.form['designation']
         consultant = request.form['consultant']
+        skills_input = request.form.get('skills', '')
+        
+        # Process skills - split by comma and trim whitespace
+        skills = [skill.strip() for skill in skills_input.split(',') if skill.strip()]
+        
+        # Handle resume file upload
+        resume_file = request.files.get('resume')
+        resume_path = None
+        
+        if resume_file and resume_file.filename:
+            if allowed_file(resume_file.filename):
+                # Create a unique filename using email
+                filename = secure_filename(f"{email}_{resume_file.filename}")
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                resume_file.save(filepath)
+                resume_path = filepath
+            else:
+                message = "Invalid file type. Please upload PDF or DOC files only."
+                return render_template('register.html', message=message)
+        
         if users.find_one({"email": email, "role": "employee"}):
             message = "Employee already registered."
         else:
-            users.insert_one({
-                "name": name, "email": email, "password": password,
-                "designation": designation, "consultant": consultant, "role": "employee"
-            })
+            user_data = {
+                "name": name, 
+                "email": email, 
+                "password": password,
+                "designation": designation, 
+                "consultant": consultant, 
+                "skills": skills,
+                "resume_path": resume_path,
+                "role": "employee"
+            }
+            users.insert_one(user_data)
             message = "Registration successful! Please login."
             return redirect('/login')
     return render_template('register.html', message=message)
