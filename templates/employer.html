@@ -1,28 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Employer Dashboard</title>
+  <title>Employer Dashboard | ASG IT</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0ebf5 0%, #f3f9fd 100%);
+      min-height: 100vh;
+    }
+    .banner {
+      background: #003366;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .centered-wrapper {
+      min-height: calc(100vh - 100px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .table-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(51,102,204,0.08);
+      padding: 2rem 2rem;
+      max-width: 800px;
+      width: 100%;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      margin-top: 0;
+      color: #003366;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.3rem;
+      font-size: 1.06rem;
+    }
+    th, td {
+      padding: 0.7rem 0.5rem;
+      text-align: left;
+    }
+    th {
+      background: #e8f0fa;
+      color: #003366;
+      font-weight: bold;
+      font-size: 1.05rem;
+      border-bottom: 2px solid #c3e0ff;
+    }
+    tr:nth-child(even) {
+      background: #f6fafd;
+    }
+    tr:hover td {
+      background: #e2edfa;
+      transition: background 0.2s;
+    }
+    a.detail-link {
+      color: #2977ef;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    a.detail-link:hover {
+      color: #003366;
+    }
+    .register-link {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      color: #2977ef;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .register-link:hover {
+      color: #003366;
+    }
+  </style>
 </head>
 <body>
-  <h2>Registered Employees</h2>
-  <table border="1">
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Designation</th>
-      <th>Consultant Name</th>
-      <th>View Details</th>
-    </tr>
-    {% for emp in employees %}
-    <tr>
-      <td>{{ emp.name }}</td>
-      <td>{{ emp.email }}</td>
-      <td>{{ emp.designation }}</td>
-      <td>{{ emp.consultant }}</td>
-      <td><a href="/employee/{{ emp.email }}">View</a></td>
-    </tr>
-    {% endfor %}
-  </table>
-  <a href="/">Register New Employee</a>
+  <div class="banner">
+    ASG IT Employer Dashboard
+  </div>
+  <div class="centered-wrapper">
+    <div class="table-card">
+      <h2>Registered Employees</h2>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Designation</th>
+          <th>Consultant Name</th>
+          <th>View Details</th>
+        </tr>
+        {% for emp in employees %}
+        <tr>
+          <td>{{ emp.name }}</td>
+          <td>{{ emp.email }}</td>
+          <td>{{ emp.designation }}</td>
+          <td>{{ emp.consultant }}</td>
+          <td><a class="detail-link" href="/employee/{{ emp.email }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a class="register-link" href="/">⇨ Register New Employee</a>
+    </div>
+  </div>
 </body>
 </html>
