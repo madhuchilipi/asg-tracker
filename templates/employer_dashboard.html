@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employer Dashboard | ASG IT</title>
+  <style>
+    body {margin:0;font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#e0ebf5 0%,#f3f9fd 100%);min-height:100vh;}
+    .banner {background:#003366;color:white;padding:2rem 0;text-align:center;font-size:2.5rem;font-weight:bold;letter-spacing:2px;box-shadow:0 4px 10px rgba(0,0,0,0.08);}
+    .centered-wrapper {min-height:calc(100vh - 100px);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem 2.5rem;max-width:600px;width:100%;margin-top:2rem;}
+    h2 {margin-top:0;color:#003366;font-size:1.5rem;text-align:center;}
+    .intro {font-size:1.12rem;color:#334c70;margin-bottom:1.5rem;text-align:center;}
+    .consultants-table {width:100%;border-collapse:collapse;}
+    th,td {padding:0.7rem 0.5rem;text-align:left;}
+    th {background:#e8f0fa;color:#003366;font-weight:bold;}
+    tr:nth-child(even) {background:#f6fafd;}
+    .logout-link {display:block;text-align:center;margin-top:2rem;color:#2977ef;font-weight:bold;text-decoration:none;}
+    .logout-link:hover {color:#003366;}
+  </style>
+</head>
+<body>
+  <div class="banner">
+    ASG IT Employer Dashboard
+  </div>
+  <div class="centered-wrapper">
+    <div class="card">
+      <h2>Consultant List</h2>
+      <div class="intro">Welcome, {{ name }}! Here are your ASG IT consultants:</div>
+      <table class="consultants-table">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Expertise</th>
+        </tr>
+        {% for c in consultants %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td>{{ c.email }}</td>
+          <td>{{ c.expertise }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a class="logout-link" href="/logout">⇦ Logout</a>
+    </div>
+  </div>
+</body>
+</html>
