@@ -9,7 +9,7 @@
     .form-card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem 2.5rem;max-width:400px;width:100%;margin-top:2rem;}
     h2 {margin-top:0;color:#003366;font-size:1.6rem;text-align:center;}
     label {display:block;margin-top:1rem;color:#334c70;font-weight:500;}
-    input[type="email"],input[type="password"],select {width:100%;padding:0.6rem;margin-top:0.3rem;border:1px solid #b6c7de;border-radius:7px;background:#f9faff;font-size:1rem;}
+    input[type="text"],input[type="password"],select {width:100%;padding:0.6rem;margin-top:0.3rem;border:1px solid #b6c7de;border-radius:7px;background:#f9faff;font-size:1rem;}
     button[type="submit"] {margin-top:1.5rem;width:100%;padding:0.7rem;border:none;border-radius:8px;background:#2977ef;color:white;font-size:1.1rem;font-weight:bold;cursor:pointer;transition:background 0.2s;}
     button[type="submit"]:hover {background:#003366;}
     .error {color:red;margin-top:1rem;text-align:center;}
@@ -26,7 +26,7 @@
       <div class="error">{{ error }}</div>
       {% endif %}
       <label for="email">Email:</label>
-      <input type="email" name="email" required>
+      <input type="text" name="email" required>
       <label for="password">Password:</label>
       <input type="password" name="password" required>
       <label for="role">Login as:</label>
