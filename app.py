@@ -1,43 +1,27 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session
 from pymongo import MongoClient
 import os
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('ASG_SECRET_KEY', 'asg_default_secret')  # For sessions
+app.secret_key = os.environ.get('ASG_SECRET_KEY', 'asg_default_secret')
 
-# MongoDB setup
 client = MongoClient("mongodb://localhost:27017/")
 db = client["asg_db"]
 users = db["users"]
-consultants = db["consultants"]
 openings = db["openings"]
 
-# ---- Seed demo data if empty (for demo/testing) ----
 def seed_data():
-    # Employees
     if users.count_documents({"role": "employee"}) == 0:
         users.insert_many([
-            {"email": "alice@asg.com", "password": "pass123", "name": "Alice", "role": "employee"},
-            {"email": "bob@asg.com", "password": "pass456", "name": "Bob", "role": "employee"}
+            {"email": "alice@asg.com", "password": "pass123", "name": "Alice", "designation": "Developer", "consultant": "Consultant A", "role": "employee"},
+            {"email": "bob@asg.com", "password": "pass456", "name": "Bob", "designation": "Tester", "consultant": "Consultant B", "role": "employee"}
         ])
-    # Employers
     if users.count_documents({"role": "employer"}) == 0:
-        users.insert_many([
-            {"email": "employer@asg.com", "password": "admin", "name": "ASG Manager", "role": "employer"}
-        ])
-    # Consultants
-    if consultants.count_documents({}) == 0:
-        consultants.insert_many([
-            {"name": "Consultant A", "email": "c.a@asg.com", "expertise": "Cloud"},
-            {"name": "Consultant B", "email": "c.b@asg.com", "expertise": "AI & ML"},
-            {"name": "Consultant C", "email": "c.c@asg.com", "expertise": "DevOps"}
-        ])
-    # Openings
+        users.insert_one({"email": "employer@asg.com", "password": "admin", "name": "ASG Manager", "role": "employer"})
     if openings.count_documents({}) == 0:
         openings.insert_many([
-            {"title": "ML Engineer", "description": "Work on ASG's AI projects.", "location": "Bangalore"},
-            {"title": "Cloud Architect", "description": "Cloud migration role.", "location": "Remote"},
-            {"title": "Frontend Developer", "description": "React experience required.", "location": "Hyderabad"}
+            {"title": "ML Engineer", "location": "Bangalore", "years_of_exp": "2", "description": "Work on ASG's AI projects."},
+            {"title": "Cloud Architect", "location": "Remote", "years_of_exp": "5", "description": "Cloud migration role."}
         ])
 seed_data()
 
@@ -45,14 +29,33 @@ seed_data()
 def home():
     return redirect('/login')
 
-# --- Login Page ---
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    message = None
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        designation = request.form['designation']
+        consultant = request.form['consultant']
+        if users.find_one({"email": email, "role": "employee"}):
+            message = "Employee already registered."
+        else:
+            users.insert_one({
+                "name": name, "email": email, "password": password,
+                "designation": designation, "consultant": consultant, "role": "employee"
+            })
+            message = "Registration successful! Please login."
+            return redirect('/login')
+    return render_template('register.html', message=message)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
-        role = request.form.get('role')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        role = request.form['role']
+        email = request.form['email']
+        password = request.form['password']
         user = users.find_one({"email": email, "role": role})
         if user and user['password'] == password:
             session['email'] = user['email']
@@ -66,7 +69,6 @@ def login():
             error = "Invalid credentials"
     return render_template('login.html', error=error)
 
-# --- Employee Dashboard: Show current openings ---
 @app.route('/employee_dashboard')
 def employee_dashboard():
     if session.get('role') != 'employee':
@@ -74,15 +76,29 @@ def employee_dashboard():
     open_roles = list(openings.find({}))
     return render_template('employee_dashboard.html', openings=open_roles, name=session.get('name', ''))
 
-# --- Employer Dashboard: Show consultant list ---
 @app.route('/employer_dashboard')
 def employer_dashboard():
     if session.get('role') != 'employer':
         return redirect('/login')
-    c_list = list(consultants.find({}))
-    return render_template('employer_dashboard.html', consultants=c_list, name=session.get('name', ''))
+    employees = list(users.find({'role': 'employee'}))
+    return render_template('employer_dashboard.html', employees=employees)
 
-# --- Logout ---
+@app.route('/add_requirement', methods=['POST'])
+def add_requirement():
+    if session.get('role') != 'employer':
+        return redirect('/login')
+    title = request.form['title']
+    location = request.form['location']
+    years_of_exp = request.form['years_of_exp']
+    description = request.form['description']
+    openings.insert_one({
+        "title": title,
+        "location": location,
+        "years_of_exp": years_of_exp,
+        "description": description
+    })
+    return redirect('/employer_dashboard')
+
 @app.route('/logout')
 def logout():
     session.clear()
