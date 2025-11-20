@@ -1,1 +1,18 @@
-<!-- Updated employee detail page HTML code. -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Details</title>
+</head>
+<body>
+  <h2>Employee Details</h2>
+  {% if employee %}
+    <p><strong>Name:</strong> {{ employee.name }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+    <p><strong>Designation:</strong> {{ employee.designation }}</p>
+    <p><strong>Consultant Name:</strong> {{ employee.consultant }}</p>
+    <a href="/employer">Back to Employer Dashboard</a>
+  {% else %}
+    <p>Employee not found.</p>
+  {% endif %}
+</body>
+</html><!-- Updated employee detail page HTML code. -->
