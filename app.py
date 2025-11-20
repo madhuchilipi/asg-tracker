@@ -11,13 +11,23 @@ users = db["users"]
 openings = db["openings"]
 
 def seed_data():
-    if users.count_documents({"role": "employee"}) == 0:
-        users.insert_many([
-            {"email": "admin", "password": "admin", "name": "Alice", "designation": "Developer", "consultant": "Consultant A", "role": "employee"},
-            {"email": "admin", "password": "admin", "name": "Bob", "designation": "Tester", "consultant": "Consultant B", "role": "employee"}
-        ])
-    if users.count_documents({"role": "employer"}) == 0:
-        users.insert_one({"email": "admin, "password": "admin", "name": "ASG Manager", "role": "employer"})
+    # Set both admin logins for employer and employee
+    if users.count_documents({"role": "employee", "email": "admin"}) == 0:
+        users.insert_one({
+            "email": "admin",
+            "password": "admin",
+            "name": "Admin Emp",
+            "designation": "Developer",
+            "consultant": "Consultant A",
+            "role": "employee"
+        })
+    if users.count_documents({"role": "employer", "email": "admin"}) == 0:
+        users.insert_one({
+            "email": "admin",
+            "password": "admin",
+            "name": "Admin Employer",
+            "role": "employer"
+        })
     if openings.count_documents({}) == 0:
         openings.insert_many([
             {"title": "ML Engineer", "location": "Bangalore", "years_of_exp": "2", "description": "Work on ASG's AI projects."},
