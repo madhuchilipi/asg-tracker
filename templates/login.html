@@ -4,7 +4,9 @@
   <title>Login | ASG IT</title>
   <style>
     body {margin:0;font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#e0ebf5 0%,#f3f9fd 100%);min-height:100vh;}
-    .banner {background:#003366;color:white;padding:2rem 0;text-align:center;font-size:2.5rem;font-weight:bold;letter-spacing:2px;box-shadow:0 4px 10px rgba(0,0,0,0.08);}
+    .banner {background:#003366;color:white;padding:2rem;display:flex;justify-content:space-between;align-items:center;font-size:2.5rem;font-weight:bold;letter-spacing:2px;box-shadow:0 4px 10px rgba(0,0,0,0.08);}
+    .reg-btn {background:white;color:#003366;padding:0.7rem 1.5rem;border-radius:8px;text-decoration:none;font-size:1rem;font-weight:bold;transition:background 0.2s, color 0.2s;}
+    .reg-btn:hover {background:#e8f0fa;color:#003366;}
     .centered-wrapper {min-height:calc(100vh - 100px);display:flex;flex-direction:column;align-items:center;justify-content:center;}
     .form-card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem 2.5rem;max-width:400px;width:100%;margin-top:2rem;}
     h2 {margin-top:0;color:#003366;font-size:1.6rem;text-align:center;}
@@ -17,7 +19,8 @@
 </head>
 <body>
   <div class="banner">
-    ASG IT Login
+    <span>ASG IT Login</span>
+    <a href="/register" class="reg-btn">Employee Registration</a>
   </div>
   <div class="centered-wrapper">
     <form class="form-card" action="/login" method="POST">
