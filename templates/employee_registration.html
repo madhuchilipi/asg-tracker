@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Employee Registration</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 720px; margin: 0 auto; }
+    .form-group { margin-bottom: 12px; }
+    label { display:block; margin-bottom:6px; }
+    input, select { width:100%; padding:8px; box-sizing:border-box; }
+    button { padding:10px 14px; background:#0a74da; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <h1>Employee Registration</h1>
+  <form method="post" action="/submit-employee"> <!-- adjust action to your backend endpoint -->
+    <div class="form-group">
+      <label for="name">Full name</label>
+      <input id="name" name="name" required />
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+    </div>
+    <div class="form-group">
+      <label for="role">Role</label>
+      <input id="role" name="role" />
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" />
+    </div>
+    <button type="submit">Register Employee</button>
+  </form>
+</body>
+</html>
