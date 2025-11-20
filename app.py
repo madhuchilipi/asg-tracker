@@ -35,12 +35,9 @@ def seed_data():
         ])
 seed_data()
 
-@app.route('/')
-def home():
-    return redirect('/login')
-
+# --------------- Employee Module ---------------
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+def employee_register():
     message = None
     if request.method == 'POST':
         name = request.form['name']
@@ -58,6 +55,43 @@ def register():
             message = "Registration successful! Please login."
             return redirect('/login')
     return render_template('register.html', message=message)
+
+@app.route('/employee_dashboard')
+def employee_dashboard():
+    if session.get('role') != 'employee':
+        return redirect('/login')
+    open_roles = list(openings.find({}))
+    return render_template('employee_dashboard.html', openings=open_roles, name=session.get('name', ''))
+
+# --------------- Employer Module ---------------
+@app.route('/employer_dashboard')
+def employer_dashboard():
+    if session.get('role') != 'employer':
+        return redirect('/login')
+    employees = list(users.find({'role': 'employee'}))
+    return render_template('employer_dashboard.html', employees=employees)
+
+# --------------- Requirements Module ---------------
+@app.route('/add_requirement', methods=['POST'])
+def add_requirement():
+    if session.get('role') != 'employer':
+        return redirect('/login')
+    title = request.form['title']
+    location = request.form['location']
+    years_of_exp = request.form['years_of_exp']
+    description = request.form['description']
+    openings.insert_one({
+        "title": title,
+        "location": location,
+        "years_of_exp": years_of_exp,
+        "description": description
+    })
+    return redirect('/employer_dashboard')
+
+# --------------- Common Routes ---------------
+@app.route('/')
+def home():
+    return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -78,36 +112,6 @@ def login():
         else:
             error = "Invalid credentials"
     return render_template('login.html', error=error)
-
-@app.route('/employee_dashboard')
-def employee_dashboard():
-    if session.get('role') != 'employee':
-        return redirect('/login')
-    open_roles = list(openings.find({}))
-    return render_template('employee_dashboard.html', openings=open_roles, name=session.get('name', ''))
-
-@app.route('/employer_dashboard')
-def employer_dashboard():
-    if session.get('role') != 'employer':
-        return redirect('/login')
-    employees = list(users.find({'role': 'employee'}))
-    return render_template('employer_dashboard.html', employees=employees)
-
-@app.route('/add_requirement', methods=['POST'])
-def add_requirement():
-    if session.get('role') != 'employer':
-        return redirect('/login')
-    title = request.form['title']
-    location = request.form['location']
-    years_of_exp = request.form['years_of_exp']
-    description = request.form['description']
-    openings.insert_one({
-        "title": title,
-        "location": location,
-        "years_of_exp": years_of_exp,
-        "description": description
-    })
-    return redirect('/employer_dashboard')
 
 @app.route('/logout')
 def logout():
