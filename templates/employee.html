@@ -1,18 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Employee Details</title>
+  <title>Employee Details | ASG IT</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0ebf5 0%, #f3f9fd 100%);
+      min-height: 100vh;
+    }
+    .banner {
+      background: #003366;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .centered-wrapper {
+      min-height: calc(100vh - 100px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .detail-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(51,102,204,0.08);
+      padding: 2rem 2.5rem 2rem 2.5rem;
+      max-width: 400px;
+      width: 100%;
+      margin-top: 2rem;
+      text-align: left;
+    }
+    h2 {
+      margin-top: 0;
+      color: #003366;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .label {
+      color: #334c70;
+      font-weight: 500;
+      margin-top: 0.9rem;
+      margin-bottom: 0.15rem;
+    }
+    .value {
+      color: #2977ef;
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      color: #2977ef;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #003366;
+    }
+  </style>
 </head>
 <body>
-  <h2>Employee Details</h2>
+  <div class="banner">
+    ASG IT Employee Details
+  </div>
+  <div class="centered-wrapper">
   {% if employee %}
-    <p><strong>Name:</strong> {{ employee.name }}</p>
-    <p><strong>Email:</strong> {{ employee.email }}</p>
-    <p><strong>Designation:</strong> {{ employee.designation }}</p>
-    <p><strong>Consultant Name:</strong> {{ employee.consultant }}</p>
-    <a href="/employer">Back to Employer Dashboard</a>
+    <div class="detail-card">
+      <h2>Employee Details</h2>
+      <div class="label">Name:</div>
+      <div class="value">{{ employee.name }}</div>
+      <div class="label">Email:</div>
+      <div class="value">{{ employee.email }}</div>
+      <div class="label">Designation:</div>
+      <div class="value">{{ employee.designation }}</div>
+      <div class="label">Consultant Name:</div>
+      <div class="value">{{ employee.consultant }}</div>
+      <a class="back-link" href="/employer">⇦ Back to Employer Dashboard</a>
+    </div>
   {% else %}
-    <p>Employee not found.</p>
+    <div class="detail-card">
+      <h2>Employee not found.</h2>
+      <a class="back-link" href="/employer">⇦ Back to Employer Dashboard</a>
+    </div>
   {% endif %}
+  </div>
 </body>
-</html><!-- Updated employee detail page HTML code. -->
+</html>
