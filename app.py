@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from pymongo import MongoClient
 from werkzeug.utils import secure_filename
 import os
@@ -15,6 +15,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
+# MongoDB setup
 client = MongoClient("mongodb://localhost:27017/")
 db = client["asg_db"]
 users = db["users"]
@@ -24,7 +25,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def seed_data():
-    # Set both admin logins for employer and employee
+    # Seed admin accounts and some sample openings if not present
     if users.count_documents({"role": "employee", "email": "admin"}) == 0:
         users.insert_one({
             "email": "admin",
@@ -46,9 +47,17 @@ def seed_data():
             {"title": "ML Engineer", "location": "Bangalore", "years_of_exp": "2", "description": "Work on ASG's AI projects."},
             {"title": "Cloud Architect", "location": "Remote", "years_of_exp": "5", "description": "Cloud migration role."}
         ])
+
 seed_data()
 
-# --------------- Employee Module ---------------
+# --------- Routes ---------
+
+@app.route('/')
+def index():
+    # Redirect to login by default
+    return redirect('/login')
+
+# Employee registration route
 @app.route('/register', methods=['GET', 'POST'])
 def employee_register():
     message = None
@@ -96,6 +105,35 @@ def employee_register():
             return redirect('/login')
     return render_template('register.html', message=message)
 
+# Login route (employee & employer)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    message = None
+    if request.method == 'POST':
+        role = request.form.get('role')
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '').strip()
+
+        if not role or not email or not password:
+            message = "Please fill all fields."
+            return render_template('login.html', message=message)
+
+        user = users.find_one({"email": email, "role": role})
+        if user and user.get('password') == password:
+            # Save minimal session info
+            session['email'] = email
+            session['role'] = role
+            session['name'] = user.get('name', '')
+            # Redirect based on role
+            if role == 'employee':
+                return redirect('/employee_dashboard')
+            else:
+                return redirect('/employer_dashboard')
+        else:
+            message = "Invalid credentials. Please try again."
+    return render_template('login.html', message=message)
+
+# Employee dashboard - shows openings
 @app.route('/employee_dashboard')
 def employee_dashboard():
     if session.get('role') != 'employee':
@@ -103,60 +141,53 @@ def employee_dashboard():
     open_roles = list(openings.find({}))
     return render_template('employee_dashboard.html', openings=open_roles, name=session.get('name', ''))
 
-# --------------- Employer Module ---------------
+# Employer dashboard - shows employees + form to add requirements
 @app.route('/employer_dashboard')
 def employer_dashboard():
     if session.get('role') != 'employer':
         return redirect('/login')
-    employees = list(users.find({'role': 'employee'}))
-    return render_template('employer_dashboard.html', employees=employees)
+    # fetch employees to show in Employees tab
+    employee_list = list(users.find({"role": "employee"}))
+    return render_template('employer_dashboard.html', employees=employee_list)
 
-# --------------- Requirements Module ---------------
-@app.route('/add_requirement', methods=['POST'])
-def add_requirement():
+# Alternate employer listing page (keeps existing employer.html template usage)
+@app.route('/employer')
+def employer():
     if session.get('role') != 'employer':
         return redirect('/login')
-    title = request.form['title']
-    location = request.form['location']
-    years_of_exp = request.form['years_of_exp']
-    description = request.form['description']
-    openings.insert_one({
-        "title": title,
-        "location": location,
-        "years_of_exp": years_of_exp,
-        "description": description
-    })
+    employee_list = list(users.find({"role": "employee"}))
+    return render_template('employer.html', employees=employee_list)
+
+# View a single employee detail
+@app.route('/employee/<email>')
+def employee_detail(email):
+    emp = users.find_one({"email": email, "role": "employee"})
+    return render_template('employee.html', employee=emp)
+
+# Add requirement (posted from employer dashboard)
+@app.route('/add_requirement', methods=['POST'])
+def add_requirement():
+    title = request.form.get('title', '').strip()
+    location = request.form.get('location', '').strip()
+    years_of_exp = request.form.get('years_of_exp', '').strip()
+    description = request.form.get('description', '').strip()
+
+    if title:
+        openings.insert_one({
+            "title": title,
+            "location": location,
+            "years_of_exp": years_of_exp,
+            "description": description
+        })
+    # After adding requirement, show employer dashboard
     return redirect('/employer_dashboard')
 
-# --------------- Common Routes ---------------
-@app.route('/')
-def home():
-    return redirect('/login')
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        role = request.form['role']
-        email = request.form['email']
-        password = request.form['password']
-        user = users.find_one({"email": email, "role": role})
-        if user and user['password'] == password:
-            session['email'] = user['email']
-            session['role'] = user['role']
-            session['name'] = user.get('name', user['email'])
-            if role == 'employee':
-                return redirect('/employee_dashboard')
-            elif role == 'employer':
-                return redirect('/employer_dashboard')
-        else:
-            error = "Invalid credentials"
-    return render_template('login.html', error=error)
-
+# Logout
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/login')
 
+# Run the app
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

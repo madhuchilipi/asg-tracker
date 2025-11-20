@@ -21,12 +21,18 @@
     .card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem;max-width:900px;width:100%;margin-top:2rem;}
     h2 {color:#003366;font-size:1.4rem;margin-top:0;text-align:center;}
 
-    /* Tabs omitted for brevity */
+    /* Tabs */
+    .tabs { display:flex; gap:10px; justify-content:center; margin-bottom:1rem; }
+    .tab { padding:0.5rem 0.9rem; border-radius:12px; background:#f6fafd; color:#003366; font-weight:600; cursor:pointer; }
+    .tab.active { background:#2977ef; color:#fff; box-shadow:0 4px 10px rgba(41,119,239,0.18); }
+
+    .tab-content { display:none; padding-top:0.5rem; }
+    .tab-content.active { display:block; }
 
     /* Form layout */
     .add-req-form { max-width:720px; margin:0 auto; }
     .form-row { display:flex; gap:0.8rem; align-items:center; margin-bottom:0.9rem; }
-    .form-row label { min-width:90px; color:#334c70; font-weight:600; }
+    .form-row label { min-width:100px; color:#334c70; font-weight:600; }
     .form-row input, .form-row textarea { flex:1; padding:0.45rem 0.6rem; border:1px solid #b6c7de; border-radius:7px; background:#f9faff; font-size:1rem; }
     .form-row textarea { min-height:80px; resize:vertical; }
 
@@ -38,15 +44,25 @@
 
     .submit-full { margin-top:1rem; width:100%; padding:0.75rem; border:none; border-radius:8px; background:#2977ef; color:white; font-size:1.05rem; font-weight:bold; cursor:pointer; }
     .submit-full:hover { background:#1753c1; }
+    .logout-link { display:block; text-align:center; margin-top:1.5rem; color:#2977ef; font-weight:bold; text-decoration:none; }
   </style>
   <script>
     function switchTab(tabName) {
+      // remove active from tabs and panes
       for (const tab of document.querySelectorAll('.tab')) tab.classList.remove('active');
-      for (const tabPane of document.querySelectorAll('.tab-content')) tabPane.classList.remove('active');
-      document.getElementById(tabName + 'TabBtn').classList.add('active');
-      document.getElementById(tabName + 'Tab').classList.add('active');
+      for (const pane of document.querySelectorAll('.tab-content')) pane.classList.remove('active');
+      // add to selected
+      const btn = document.getElementById(tabName + 'TabBtn');
+      const pane = document.getElementById(tabName + 'Tab');
+      if (btn && pane) {
+        btn.classList.add('active');
+        pane.classList.add('active');
+      }
     }
-    window.onload = function() { switchTab('Employees'); };
+    // set default on load
+    window.addEventListener('DOMContentLoaded', function() {
+      switchTab('Employees');
+    });
   </script>
 </head>
 <body>
@@ -63,7 +79,25 @@
 
       <div class="tab-content" id="EmployeesTab">
         <h2>Registered Employees</h2>
-        <!-- existing table retained -->
+        <!-- Keep your existing table here - it will be shown when Employees tab is active -->
+        <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
+          <tr>
+            <th style="text-align:left;padding:0.6rem;background:#e8f0fa;color:#003366;">Name</th>
+            <th style="text-align:left;padding:0.6rem;background:#e8f0fa;color:#003366;">Email</th>
+            <th style="text-align:left;padding:0.6rem;background:#e8f0fa;color:#003366;">Designation</th>
+            <th style="text-align:left;padding:0.6rem;background:#e8f0fa;color:#003366;">Consultant Name</th>
+            <th style="text-align:left;padding:0.6rem;background:#e8f0fa;color:#003366;">View</th>
+          </tr>
+          {% for emp in employees %}
+          <tr>
+            <td style="padding:0.6rem;">{{ emp.name }}</td>
+            <td style="padding:0.6rem;">{{ emp.email }}</td>
+            <td style="padding:0.6rem;">{{ emp.designation }}</td>
+            <td style="padding:0.6rem;">{{ emp.consultant }}</td>
+            <td style="padding:0.6rem;"><a class="detail-link" href="/employee/{{ emp.email }}">View</a></td>
+          </tr>
+          {% endfor %}
+        </table>
       </div>
 
       <div class="tab-content" id="RequirementsTab">
@@ -88,7 +122,7 @@
         </form>
       </div>
 
-      <a class="logout-link" href="/logout" style="display:block;text-align:center;margin-top:1.5rem;color:#2977ef;font-weight:bold;text-decoration:none;">Logout</a>
+      <a class="logout-link" href="/logout">Logout</a>
     </div>
   </div>
 </body>
