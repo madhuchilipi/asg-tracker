@@ -9,7 +9,8 @@
     .form-card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem 2.5rem;max-width:400px;width:100%;margin-top:2rem;}
     h2 {margin-top:0;color:#003366;font-size:1.6rem;text-align:center;}
     label {display:block;margin-top:1rem;color:#334c70;font-weight:500;}
-    input[type="text"],input[type="password"] {width:100%;padding:0.6rem;margin-top:0.3rem;border:1px solid #b6c7de;border-radius:7px;background:#f9faff;font-size:1rem;}
+    input[type="text"],input[type="password"],input[type="file"] {width:100%;padding:0.6rem;margin-top:0.3rem;border:1px solid #b6c7de;border-radius:7px;background:#f9faff;font-size:1rem;}
+    input[type="file"] {padding:0.4rem;}
     button[type="submit"] {margin-top:1.5rem;width:100%;padding:0.7rem;border:none;border-radius:8px;background:#2977ef;color:white;font-size:1.1rem;font-weight:bold;cursor:pointer;}
     button[type="submit"]:hover {background:#003366;}
     .login-link {display:block;text-align:center;margin-top:1.5rem;color:#2977ef;font-weight:bold;text-decoration:none;}
@@ -19,9 +20,9 @@
   </style>
 </head>
 <body>
-  <div class="banner">ASG IT Employee Registration</div>
+  <div class="banner">Employee Registration</div>
   <div class="centered-wrapper">
-    <form class="form-card" method="POST" action="/register">
+    <form class="form-card" method="POST" action="/register" enctype="multipart/form-data">
       <h2>Register Employee</h2>
       {% if message %}
       <div class="message">{{ message }}</div>
@@ -36,6 +37,10 @@
       <input type="text" name="designation" required>
       <label for="consultant">Consultant Name:</label>
       <input type="text" name="consultant" required>
+      <label for="resume">Resume (PDF/DOC):</label>
+      <input type="file" name="resume" accept=".pdf,.doc,.docx" required>
+      <label for="skills">Current Skills (comma-separated):</label>
+      <input type="text" name="skills" placeholder="e.g., Python, Java, AWS" required>
       <button type="submit">Register</button>
       <a class="login-link" href="/login">⇨ Login Page</a>
     </form>
