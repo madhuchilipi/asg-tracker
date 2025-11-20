@@ -1,1 +1,28 @@
-<!-- Updated employer dashboard HTML code. -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employer Dashboard</title>
+</head>
+<body>
+  <h2>Registered Employees</h2>
+  <table border="1">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Designation</th>
+      <th>Consultant Name</th>
+      <th>View Details</th>
+    </tr>
+    {% for emp in employees %}
+    <tr>
+      <td>{{ emp.name }}</td>
+      <td>{{ emp.email }}</td>
+      <td>{{ emp.designation }}</td>
+      <td>{{ emp.consultant }}</td>
+      <td><a href="/employee/{{ emp.email }}">View</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <a href="/">Register New Employee</a>
+</body>
+</html>
