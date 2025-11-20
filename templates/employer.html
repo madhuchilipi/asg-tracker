@@ -12,13 +12,28 @@
     .banner {
       background: #003366;
       color: white;
-      padding: 2rem 0;
-      text-align: center;
+      padding: 2rem 2.5rem;
+      text-align: left;
       font-size: 2.5rem;
       font-weight: bold;
       letter-spacing: 2px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
     }
+    .banner .title { font-size: 2.2rem; }
+    .reg-btn {
+      background: #ffffff;
+      color: #003366;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    .reg-btn:hover { background:#e8f0fa; }
     .centered-wrapper {
       min-height: calc(100vh - 100px);
       display: flex;
@@ -30,68 +45,27 @@
       background: white;
       border-radius: 16px;
       box-shadow: 0 8px 32px rgba(51,102,204,0.08);
-      padding: 2rem 2rem;
-      max-width: 800px;
+      padding: 2rem;
+      max-width: 900px;
       width: 100%;
       margin-top: 2rem;
-      margin-bottom: 2rem;
     }
-    h2 {
-      margin-top: 0;
-      color: #003366;
-      font-size: 1.5rem;
-      text-align: center;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1.3rem;
-      font-size: 1.06rem;
-    }
-    th, td {
-      padding: 0.7rem 0.5rem;
-      text-align: left;
-    }
-    th {
-      background: #e8f0fa;
-      color: #003366;
-      font-weight: bold;
-      font-size: 1.05rem;
-      border-bottom: 2px solid #c3e0ff;
-    }
-    tr:nth-child(even) {
-      background: #f6fafd;
-    }
-    tr:hover td {
-      background: #e2edfa;
-      transition: background 0.2s;
-    }
-    a.detail-link {
-      color: #2977ef;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.2s;
-    }
-    a.detail-link:hover {
-      color: #003366;
-    }
-    .register-link {
-      display: block;
-      text-align: center;
-      margin-top: 2rem;
-      color: #2977ef;
-      font-weight: bold;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .register-link:hover {
-      color: #003366;
-    }
+    h2 { color:#003366; font-size:1.4rem; margin-top:0; text-align:center; }
+    table { width:100%; border-collapse:collapse; margin-top:1.1rem; }
+    th,td { padding:0.7rem 0.5rem; text-align:left; }
+    th { background:#e8f0fa; color:#003366; font-weight:bold; }
+    tr:nth-child(even) { background:#f6fafd; }
+    tr:hover td { background: #e2edfa; transition: background 0.2s; }
+    a.detail-link { color: #2977ef; text-decoration:none; font-weight:bold; transition: color 0.2s; }
+    a.detail-link:hover { color:#003366; }
+    .register-link { display:block; text-align:center; margin-top:2rem; color:#2977ef; font-weight:bold; text-decoration:none; transition: color 0.2s; }
+    .register-link:hover { color:#003366; }
   </style>
 </head>
 <body>
   <div class="banner">
-    ASG IT Consultant Tracker
+    <div class="title">ASG IT Consultant Tracker</div>
+    <a class="reg-btn" href="/register">Employee Registration</a>
   </div>
   <div class="centered-wrapper">
     <div class="table-card">
@@ -114,7 +88,7 @@
         </tr>
         {% endfor %}
       </table>
-      <a class="register-link" href="/">⇨ Register New Employee</a>
+      <a class="register-link" href="/register">⇨ Register New Employee</a>
     </div>
   </div>
 </body>
