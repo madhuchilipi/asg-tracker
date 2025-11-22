@@ -2,46 +2,83 @@
 <html>
 <head>
   <title>Employee Registration | ASG IT</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body {margin:0;background:linear-gradient(135deg,#e0ebf5 0%,#f3f9fd 100%);font-family:'Segoe UI',Arial,sans-serif;}
-    .banner {background:#003366;color:white;padding:2rem 0;text-align:center;font-size:2.5rem;font-weight:bold;}
-    .centered-wrapper {display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 100px);}
-    .form-card {background:white;border-radius:16px;box-shadow:0 8px 32px rgba(51,102,204,0.08);padding:2rem 2.5rem;max-width:400px;width:100%;margin-top:2rem;}
-    h2 {margin-top:0;color:#003366;font-size:1.6rem;text-align:center;}
-    label {display:block;margin-top:1rem;color:#334c70;font-weight:500;}
-    input[type="text"],input[type="password"],input[type="file"] {width:100%;padding:0.6rem;margin-top:0.3rem;border:1px solid #b6c7de;border-radius:7px;background:#f9faff;font-size:1rem;}
-    input[type="file"] {padding:0.4rem;}
-    button[type="submit"] {margin-top:1.5rem;width:100%;padding:0.7rem;border:none;border-radius:8px;background:#2977ef;color:white;font-size:1.1rem;font-weight:bold;cursor:pointer;}
-    button[type="submit"]:hover {background:#003366;}
-    .login-link {display:block;text-align:center;margin-top:1.5rem;color:#2977ef;font-weight:bold;text-decoration:none;}
-    .login-link:hover {color:#003366;}
-    .message {color:green;text-align:center;margin-bottom:1rem;}
-    .error {color:red;text-align:center;margin-bottom:1rem;}
+    body { margin:0; background:linear-gradient(135deg,#e0ebf5 0%,#f3f9fd 100%); font-family:'Segoe UI',Arial,sans-serif; }
+    .banner { background:#003366; color:white; padding:2rem 2.5rem; text-align:center; font-size:2.2rem; font-weight:bold; }
+    .centered-wrapper { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:calc(100vh - 120px); }
+    .form-card { background:white; border-radius:16px; box-shadow:0 8px 32px rgba(51,102,204,0.08); padding:2rem 2.5rem; max-width:480px; width:100%; margin-top:2rem; }
+    h2 { margin-top:0; color:#003366; font-size:1.6rem; text-align:center; }
+    .form-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.9rem; }
+    .form-row label { min-width:110px; color:#334c70; font-weight:600; }
+    .form-row input[type="text"],
+    .form-row input[type="password"],
+    .form-row input[type="file"],
+    .form-row textarea { flex:1; padding:0.6rem; border:1px solid #b6c7de; border-radius:8px; background:#f9faff; font-size:1rem; }
+    .form-row input[type="file"] { padding:0.4rem; }
+    textarea { min-height:100px; resize:vertical; }
+    button[type="submit"] { margin-top:1rem; width:100%; padding:0.75rem; border:none; border-radius:8px; background:#2977ef; color:white; font-size:1.05rem; font-weight:bold; cursor:pointer; }
+    button[type="submit"]:hover { background:#1753c1; }
+    .login-link { display:block; text-align:center; margin-top:1rem; color:#2977ef; font-weight:bold; text-decoration:none; }
+    .login-link:hover { color:#003366; }
+    .message { color:green; text-align:center; margin-bottom:1rem; }
+    .error { color:red; text-align:center; margin-bottom:1rem; }
+    @media (max-width:560px) {
+      .form-row { flex-direction:column; align-items:stretch; }
+      .form-row label { min-width:unset; margin-bottom:0.35rem; }
+    }
   </style>
 </head>
 <body>
   <div class="banner">Employee Registration</div>
+
   <div class="centered-wrapper">
     <form class="form-card" method="POST" action="/register" enctype="multipart/form-data">
       <h2>Register Employee</h2>
+
       {% if message %}
       <div class="message">{{ message }}</div>
       {% endif %}
-      <label for="name">Name:</label>
-      <input type="text" name="name" required>
-      <label for="email">Email:</label>
-      <input type="text" name="email" required>
-      <label for="password">Password:</label>
-      <input type="password" name="password" required>
-      <label for="designation">Designation:</label>
-      <input type="text" name="designation" required>
-      <label for="consultant">Consultant Name:</label>
-      <input type="text" name="consultant" required>
-      <label for="resume">Resume (PDF/DOC):</label>
-      <input type="file" name="resume" accept=".pdf,.doc,.docx" required>
-      <label for="skills">Current Skills (comma-separated):</label>
-      <input type="text" name="skills" placeholder="e.g., Python, Java, AWS" required>
+
+      <!-- Single Name field (duplicate removed) -->
+      <div class="form-row">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-row">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required>
+      </div>
+
+      <div class="form-row">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="form-row">
+        <label for="designation">Designation:</label>
+        <input type="text" id="designation" name="designation" required>
+      </div>
+
+      <div class="form-row">
+        <label for="consultant">Consultant Name:</label>
+        <input type="text" id="consultant" name="consultant" required>
+      </div>
+
+      <div class="form-row">
+        <label for="resume">Resume (PDF/DOC):</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+      </div>
+
+      <div class="form-row">
+        <label for="skills">Current Skills:</label>
+        <input type="text" id="skills" name="skills" placeholder="e.g., Python, Java, AWS" required>
+      </div>
+
       <button type="submit">Register</button>
+
       <a class="login-link" href="/login">⇨ Login Page</a>
     </form>
   </div>
